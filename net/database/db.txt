@@ -1,0 +1,23 @@
+Config
+    - HashInfo Bytes
+    - PublicKey Bytes
+    - PrivateKey Bytes
+    - Description String
+    - Type int32
+Port
+    - LocalPort int32
+    - RemotePort int32
+NodeList
+    - HashInfo bytes
+    - Address bytes
+    - Port int32
+    - NeedHole bool
+    - CanConnection bool
+    - Description String
+    - Type int32
+    - PublicKey Bytes
+    - LastCheckTime Date
+Router
+    - Remote Bytes
+    - Next Bytes
+    - Weight Double

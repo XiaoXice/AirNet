@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package AirNet.common.proto;
+option go_package = "proto";
+
+enum FrameType {
+    Ping = 0;
+    Normal = 1;
+}
+
+message Frame {
+    FrameType Type = 1;
+    bytes From = 2;
+    bytes To = 3;
+    int32 TTL = 4;
+    repeated string PassWay = 5;
+    bytes Content = 6;
+}
+
+enum PkgType {
+    Hello = 0;
+    Exchange = 1;
+    Query = 2;
+    Answer = 3;
+};
+message Pkg {
+    PkgType Type = 1;
+    int32 Channel = 2;
+    int32 No = 3;
+    bytes From = 4;
+    bytes To = 5;
+    bool Encryption = 6;
+    bytes Content = 7;
+    SignVectorPair Sign = 8;
+}
+message SignVectorPair {
+    bytes SignR = 1;
+    bytes SignS = 2;
+}
+enum KeyType {
+    Ecc256 = 0;
+    Ecc384 = 1;
+    Ecc512 = 2;
+}
+enum NodeType {
+    Common = 0; // 普通节点 什么都干
+    Pigeon = 1; // 信鸽节点 主要负责传递信息,维持大量的连接,但是本身存储的信息比较少
+    User = 2; // 用户节点 使用网络的人,不给网络做出贡献
+    Squirrel = 3; // 松鼠节点 提供大量存储空间用来保存网络上产生的数据
+    Waiter = 4; // 侍者节点 提供终端服务
+}
+message HelloMsg {
+    string SendTime = 1;
+    string description = 2;
+    NodeType NodeType = 3;
+    bytes PublicKey = 4;
+    KeyType KeyType = 5;
+}
+enum EncryptType {
+    AES128 = 0;
+}
+message ExchangeMsg {
+    EncryptType Type = 1;
+    bytes EncryptKey = 2;
+}
+message QueryMsg {
+    oneof Addr {
+        string Domain = 1;
+        bytes IP = 2;
+    }
+    int32 Port = 3;
+}
+enum ErrorCode {
+    OK = 0;
+    ParsingError = 1;
+    TargetAddressError = 2;
+    TimeOutError = 3;
+}
