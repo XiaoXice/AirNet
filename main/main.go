@@ -4,13 +4,14 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"os"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/pem"
-	"crypto/sha256"
-	"math/big"
 	"fmt"
+	"math/big"
+	"os"
 )
+
 //生成ECC椭圆曲线密钥对，保存到文件
 func GenerateECCKey() {
 	//生成密钥对
@@ -93,7 +94,7 @@ func GetECCPublicKey(path string) *ecdsa.PublicKey {
 }
 
 //对消息的散列值生成数字签名
-func SignECC(msg []byte, path string)([]byte,[]byte) {
+func SignECC(msg []byte, path string) ([]byte, []byte) {
 	//取得私钥
 	privateKey := GetECCPrivateKey(path)
 	//计算哈希值
@@ -112,20 +113,21 @@ func SignECC(msg []byte, path string)([]byte,[]byte) {
 }
 
 //验证数字签名
-func VerifySignECC(msg []byte,rtext,stext []byte,path string) bool{
+func VerifySignECC(msg []byte, rtext, stext []byte, path string) bool {
 	//读取公钥
-	publicKey:=GetECCPublicKey(path)
+	publicKey := GetECCPublicKey(path)
 	//计算哈希值
 	hash := sha256.New()
 	hash.Write(msg)
 	bytes := hash.Sum(nil)
 	//验证数字签名
-	var r,s big.Int
+	var r, s big.Int
 	r.UnmarshalText(rtext)
 	s.UnmarshalText(stext)
 	verify := ecdsa.Verify(publicKey, bytes, &r, &s)
 	return verify
 }
+
 //测试
 func main() {
 	//生成ECC密钥对文件
@@ -133,17 +135,17 @@ func main() {
 
 	//模拟发送者
 	//要发送的消息
-	msg:=[]byte("hello world")
+	msg := []byte("hello world")
 	//生成数字签名
-	rtext,stext:=SignECC(msg,"eccprivate.pem")
+	rtext, stext := SignECC(msg, "eccprivate.pem")
 
 	//模拟接受者
 	//接受到的消息
-	acceptmsg:=[]byte("hello world")
+	acceptmsg := []byte("hello world")
 	//接收到的签名
-	acceptrtext:=rtext
-	acceptstext:=stext
+	acceptrtext := rtext
+	acceptstext := stext
 	//验证签名
 	verifySignECC := VerifySignECC(acceptmsg, acceptrtext, acceptstext, "eccpublic.pem")
-	fmt.Println("验证结果：",verifySignECC)
+	fmt.Println("验证结果：", verifySignECC)
 }

@@ -8,13 +8,13 @@ import (
 	"net"
 )
 
-type CallBackChannelFun func (pkg proto.Pkg)
+type CallBackChannelFun func(pkg proto.Pkg)
 
 type UdpCon struct {
-	Local *n.Node
+	Local  *n.Node
 	Logger logger.Logger
-	c *net.UDPConn
-	R RouterTable
+	c      *net.UDPConn
+	R      RouterTable
 	List
 	socket map[n.HashInfo]map[int32]CallBackChannelFun
 }
@@ -36,6 +36,6 @@ func (c *UdpCon) Start(ip net.IP) error {
 	go udpListener(c)
 }
 
-func udpListener(c *UdpCon){
+func udpListener(c *UdpCon) {
 
 }
