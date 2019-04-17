@@ -3,7 +3,6 @@ package frame
 import (
 	n "github.com/XiaoXice/AirNet/net"
 	"math/rand"
-	"net"
 )
 
 type RouterTable struct {
@@ -12,13 +11,11 @@ type RouterTable struct {
 
 type Next struct {
 	Node *n.Node
-	c *net.UDPConn
 	Weight map[n.HashInfo]float32
 	stop chan bool
 }
 
-func (r *RouterTable)Next(remote n.HashInfo) *Next {
-	list := new([len(r.Table)]float32)
+func (r *RouterTable)Next(remote n.HashInfo) (list []float32) {
 	var total float32
 	for index,next := range r.Table{
 		if weight,ok := next.Weight[remote];ok {
@@ -29,14 +26,7 @@ func (r *RouterTable)Next(remote n.HashInfo) *Next {
 		}
 		total += list[index]
 	}
-	random := rand.Float32() * total
-	for index,weight := range list{
-		random -=weight
-		if random < 0 {
-			return r.Table[index]
-		}
-	}
-	return r.Table[len(r.Table)-1]
+	return list
 }
 
 func (r *RouterTable)AddNext(node *n.Node) error {

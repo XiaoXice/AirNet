@@ -20,8 +20,4 @@ type Node struct {
 	LastCheckTime time.Time
 }
 
-type NodeList struct {
-	List map[HashInfo]Node
-}
-
 
