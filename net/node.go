@@ -18,6 +18,13 @@ func NewHashInfo(bs []byte) (h HashInfo) {
 	}
 	return h
 }
+func (h *HashInfo)ToBytes() []byte {
+	b := make([]byte, 64)
+	for index := range b {
+		b[index] = h[index]
+	}
+	return b
+}
 
 type Node struct {
 	HashInfo      HashInfo
