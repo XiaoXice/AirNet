@@ -10,14 +10,14 @@ import (
 	"testing"
 )
 
-func TestJSON(t *testing.T){
-	type User struct{
+func TestJSON(t *testing.T) {
+	type User struct {
 		Name []byte `json:"name"`
-		Age int     `json:"ageeeeeeeeeeeeeeeeee"`
+		Age  int    `json:"ageeeeeeeeeeeeeeeeee"`
 	}
 	user := User{
-		Name:[]byte("tom"),
-		Age:3,
+		Name: []byte("tom"),
+		Age:  3,
 	}
 	b, _ := json.Marshal(user)
 	fmt.Println(string(b))
@@ -32,7 +32,7 @@ func TestJSON(t *testing.T){
 func TestRandReader(t *testing.T) {
 	hash := make([]byte, 128)
 	md := sha256.New()
-	_,_ = rand.Reader.Read(hash)
+	_, _ = rand.Reader.Read(hash)
 	md.Write(hash)
 	fmt.Printf("%s\n", hex.EncodeToString(md.Sum(nil)))
 }

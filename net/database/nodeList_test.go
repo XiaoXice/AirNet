@@ -29,13 +29,13 @@ func TestDataBase_LoadAndSaveNodeList(t *testing.T) {
 func randomNode() Node {
 	hash := make([]byte, 1024)
 	sha := sha256.New()
-	_,_ = rand.Reader.Read(hash)
+	_, _ = rand.Reader.Read(hash)
 	sha.Write(hash)
 	hashInfo := NewHashInfo(sha.Sum(nil))
 	privateKey, _ := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
 	return Node{
 		HashInfo:      hashInfo,
-		Address:       net.IPAddr{IP: net.IPv4(0,0,0,0)},
+		Address:       net.IPAddr{IP: net.IPv4(0, 0, 0, 0)},
 		Port:          0,
 		NeedHole:      false,
 		CanConnection: false,

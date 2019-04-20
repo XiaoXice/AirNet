@@ -13,7 +13,8 @@ type PortNew struct {
 	RemotePort    int
 	RemoteAddress string
 }
-func (d *DataBase)SelectALlPort() (reRows []PortNew,err error){
+
+func (d *DataBase) SelectALlPort() (reRows []PortNew, err error) {
 	rows, err := d.db.Query("SELECT * FROM NodeList;")
 	if err != nil {
 		d.Logger.Handler("Err on SelectPort: " + err.Error())
@@ -24,10 +25,10 @@ func (d *DataBase)SelectALlPort() (reRows []PortNew,err error){
 	reRows = make([]PortNew, 0)
 	for rows.Next() {
 		row := PortNew{}
-		if err = rows.Scan(&row.LocalPort,&row.RemotePort,&row.RemoteAddress); err != nil {
+		if err = rows.Scan(&row.LocalPort, &row.RemotePort, &row.RemoteAddress); err != nil {
 			d.Logger.Handler(err.Error())
 			return nil, err
-		}else {
+		} else {
 			reRows = append(reRows, row)
 		}
 	}
@@ -45,7 +46,8 @@ type NodeListNew struct {
 	PublicKey     []byte
 	LastCheckTime time.Time
 }
-func (n *NodeListNew)ToNode() (node *Node, err error){
+
+func (n *NodeListNew) ToNode() (node *Node, err error) {
 	var p interface{}
 	if n.PublicKey != nil {
 		p, err = x509.ParsePKIXPublicKey(n.PublicKey)
@@ -75,10 +77,10 @@ func (n *NodeListNew)ToNode() (node *Node, err error){
 	}
 	return node, nil
 }
-func (n *NodeListNew)ToList() []interface{} {
+func (n *NodeListNew) ToList() []interface{} {
 	return nil
 }
-func (d *DataBase)SelectALlNodeList() (reRows []NodeListNew,err error){
+func (d *DataBase) SelectALlNodeList() (reRows []NodeListNew, err error) {
 	rows, err := d.db.Query("SELECT * FROM NodeList;")
 	if err != nil {
 		d.Logger.Handler("Err on SelectPort: " + err.Error())
@@ -101,7 +103,7 @@ func (d *DataBase)SelectALlNodeList() (reRows []NodeListNew,err error){
 		if err != nil {
 			d.Logger.Handler(err.Error())
 			return nil, err
-		}else {
+		} else {
 			reRows = append(reRows, row)
 		}
 	}
@@ -114,7 +116,7 @@ type RouterNew struct {
 	Weight float32
 }
 
-func (d *DataBase)SelectALlRouter() (reRows []RouterNew,err error){
+func (d *DataBase) SelectALlRouter() (reRows []RouterNew, err error) {
 	rows, err := d.db.Query("SELECT * FROM Router;")
 	if err != nil {
 		d.Logger.Handler("Err on SelectPort: " + err.Error())
@@ -132,7 +134,7 @@ func (d *DataBase)SelectALlRouter() (reRows []RouterNew,err error){
 		if err != nil {
 			d.Logger.Handler(err.Error())
 			return nil, err
-		}else {
+		} else {
 			reRows = append(reRows, row)
 		}
 	}

@@ -14,8 +14,8 @@ func (d *DataBase) LoadNodeList() (*NodeList, error) {
 		return nil, err
 	}
 	list := make(map[HashInfo]Node)
-	for _,row := range rows {
-		node,err := row.ToNode()
+	for _, row := range rows {
+		node, err := row.ToNode()
 		if err != nil {
 			return nil, err
 		}

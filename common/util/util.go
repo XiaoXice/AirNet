@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-func Strict2Map(obj interface{}) (map[string]interface{},[]string) {
+func Strict2Map(obj interface{}) (map[string]interface{}, []string) {
 	t := reflect.TypeOf(obj)
 	v := reflect.ValueOf(obj)
 

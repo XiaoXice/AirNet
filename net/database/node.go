@@ -7,6 +7,7 @@ import (
 	"net"
 	"time"
 )
+
 type HashInfo [32]byte
 
 func NewHashInfo(bs []byte) (h HashInfo) {
@@ -19,7 +20,7 @@ func NewHashInfo(bs []byte) (h HashInfo) {
 	}
 	return h
 }
-func (h *HashInfo)ToBytes() []byte {
+func (h *HashInfo) ToBytes() []byte {
 	b := make([]byte, 32)
 	for index := range b {
 		b[index] = h[index]
@@ -39,7 +40,7 @@ type Node struct {
 	LastCheckTime time.Time
 }
 
-func (n *Node)ToNodeListNew() (*NodeListNew,error){
+func (n *Node) ToNodeListNew() (*NodeListNew, error) {
 	var puk []byte
 	if n.PublicKey == nil {
 		puk = nil

@@ -11,7 +11,7 @@ func TestValue(t *testing.T) {
 		A string
 		b string
 	}
-	node := a{"1","2"}
+	node := a{"1", "2"}
 	fmt.Println(util.Strict2Map(node))
 	//v := reflect.ValueOf(node)
 	//T := reflect.TypeOf(node)
@@ -21,4 +21,3 @@ func TestValue(t *testing.T) {
 	//	fmt.Println(T.Field(count).Name,"+", field.Interface(), "+", reflect.TypeOf(newType.Interface()))
 	//}
 }
-
