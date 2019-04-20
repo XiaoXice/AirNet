@@ -20,6 +20,14 @@ func NewHashInfo(bs []byte) (h HashInfo) {
 	}
 	return h
 }
+func NewHashInfoList(bss [][]byte) (hs []HashInfo) {
+	hs = make([]HashInfo, 0)
+	for _, bs := range bss {
+		hs = append(hs, NewHashInfo(bs))
+	}
+	return hs
+}
+
 func (h *HashInfo) ToBytes() []byte {
 	b := make([]byte, 32)
 	for index := range b {
@@ -62,4 +70,12 @@ func (n *Node) ToNodeListNew() (*NodeListNew, error) {
 		PublicKey:     puk,
 		LastCheckTime: n.LastCheckTime,
 	}, nil
+}
+
+func (n *Node)ToUDPAddr() *net.UDPAddr {
+	return &net.UDPAddr{
+		IP:   n.Address.IP,
+		Port: int(n.Port),
+		Zone: n.Address.Zone,
+	}
 }

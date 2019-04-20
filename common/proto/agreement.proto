@@ -6,6 +6,8 @@ option go_package = "proto";
 enum FrameType {
     Ping = 0;
     Normal = 1;
+    ACK = 2;
+    RE = 3;
 }
 
 message Frame {
@@ -13,7 +15,7 @@ message Frame {
     bytes From = 2;
     bytes To = 3;
     int32 TTL = 4;
-    repeated string PassWay = 5;
+    repeated bytes PassWay = 5;
     bytes Content = 6;
 }
 
