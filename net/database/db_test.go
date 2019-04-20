@@ -25,13 +25,3 @@ func TestDataBase_Connect(t *testing.T) {
 		t.Error("Database init error")
 	}
 }
-
-func TestDataBase_Select(t *testing.T) {
-	if !DB.CanUse() {
-		TestDataBase_Connect(t)
-	}
-	//rows, rowCount, err := DB.Select(NodeListNew{},"SELECT * FROM NodeList;")
-	//if err != nil && len(rows) != rowCount {
-	//	t.Error("Something error.")
-	//}
-}

@@ -4,7 +4,6 @@ import (
 	"crypto/ecdsa"
 	"crypto/x509"
 	"github.com/XiaoXice/AirNet/common/proto"
-	"github.com/XiaoXice/AirNet/net"
 	net2 "net"
 	"time"
 )
@@ -46,23 +45,38 @@ type NodeListNew struct {
 	PublicKey     []byte
 	LastCheckTime time.Time
 }
-func (n *NodeListNew)ToNode() (Node *net.Node, err error){
-	p,err := x509.ParsePKIXPublicKey(n.PublicKey)
-	if err != nil {
-		return nil, err
+func (n *NodeListNew)ToNode() (node *Node, err error){
+	var p interface{}
+	if n.PublicKey != nil {
+		p, err = x509.ParsePKIXPublicKey(n.PublicKey)
+		if err != nil {
+			p = nil
+			//return nil, err
+		}
+	} else {
+		p = nil
 	}
-	Node = &net.Node{
-		HashInfo:      net.NewHashInfo(n.HashInfo),
-		Address:       net2.IPAddr{IP: n.Address, Zone: nil},
+	var pu *ecdsa.PublicKey
+	if p == nil {
+		pu = nil
+	} else {
+		pu = p.(*ecdsa.PublicKey)
+	}
+	node = &Node{
+		HashInfo:      NewHashInfo(n.HashInfo),
+		Address:       net2.IPAddr{IP: n.Address},
 		Port:          int32(n.Port),
 		NeedHole:      n.NeedHole,
 		CanConnection: n.CanConnection,
 		Description:   n.Description,
 		Type:          proto.NodeType(n.Type),
-		PublicKey:     p.(*ecdsa.PublicKey),
+		PublicKey:     pu,
 		LastCheckTime: n.LastCheckTime,
 	}
-	return Node, nil
+	return node, nil
+}
+func (n *NodeListNew)ToList() []interface{} {
+	return nil
 }
 func (d *DataBase)SelectALlNodeList() (reRows []NodeListNew,err error){
 	rows, err := d.db.Query("SELECT * FROM NodeList;")

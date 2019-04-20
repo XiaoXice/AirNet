@@ -2,13 +2,16 @@ package config
 
 import (
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/json"
 	"github.com/XiaoXice/AirNet/common/proto"
 	"github.com/XiaoXice/AirNet/net"
 	"io/ioutil"
 	"os"
+	path2 "path"
 )
 
 type Configs struct {
@@ -55,7 +58,7 @@ func LoadJsonConfig(path string) (c *Config,err error){
 	if contents,err := ioutil.ReadFile(path);err == nil {
 		_, e := os.Stat(path)
 		if e != nil {
-
+			return initConfig(path2.Join(path2.Dir(path),"data.db"))
 		}
 		cj := Configs{}
 		err := json.Unmarshal(contents,&cj)
@@ -105,8 +108,25 @@ func (c *Config) SaveJsonConfig(path string) error {
 	return nil
 }
 
-func initConfig() *Config {
-	hash := make([]byte, 64)
+func initConfig(dbPath string) (*Config, error) {
+	hash := make([]byte, 1024)
+	sha := sha256.New()
 	_,_ = rand.Reader.Read(hash)
-	return nil
+	sha.Write(hash)
+	hashInfo := net.NewHashInfo(sha.Sum(nil))
+	privateKey, err := ecdsa.GenerateKey(elliptic.P521(), rand.Reader)
+	if err != nil {
+		return nil, err
+	}
+	config := &Config{
+		HashInfo:     hashInfo,
+		PublicKey:    &privateKey.PublicKey,
+		PrivateKey:   privateKey,
+		Description:  "我只是一个萌新节点, 请多关照.",
+		Type:         proto.NodeType_Common,
+		DataBaseType: "sqlite3",
+		Path:         dbPath,
+		UDPPort:      0,
+	}
+	return config, nil
 }

@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"path"
 	"testing"
 )
 
@@ -34,4 +35,10 @@ func TestRandReader(t *testing.T) {
 	_,_ = rand.Reader.Read(hash)
 	md.Write(hash)
 	fmt.Printf("%s\n", hex.EncodeToString(md.Sum(nil)))
+}
+
+func TestPath(t *testing.T) {
+	dir := path.Dir("C:/a/b/c/d/e.exe")
+	fmt.Println(dir)
+	fmt.Println(path.Join(dir, "b.exe"))
 }
